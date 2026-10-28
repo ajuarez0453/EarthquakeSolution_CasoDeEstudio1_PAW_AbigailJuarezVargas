@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EarthquakeAPI/EarthquakeAPI.csproj" />
+  <Project Path="EarthquakeData/EarthquakeData.csproj" />
+  <Project Path="EarthquakeDTO/EarthquakeDTO.csproj" />
+  <Project Path="EarthquakeMVC/EarthquakeMVC.csproj" Id="fd3eaa4d-776e-4928-80e8-82f19dac95d3" />
+</Solution>

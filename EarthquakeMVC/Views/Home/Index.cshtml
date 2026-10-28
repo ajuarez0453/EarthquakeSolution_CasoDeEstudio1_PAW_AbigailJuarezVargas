@@ -1,0 +1,119 @@
+﻿@model EarthquakeDTO.CountryEarthquakesDto
+
+@{
+    ViewData["Title"] = "Earthquake Explorer";
+}
+
+<div class="explorer-page">
+
+    <div class="explorer-header">
+        <h1>🌎 Earthquake Explorer</h1>
+        <p>Explora la actividad sísmica por país</p>
+    </div>
+
+    <form asp-controller="Home" asp-action="Search"
+          method="post" class="search-form">
+
+        <input type="text"
+               name="countryName"
+               placeholder="Escribe el nombre de un país..."
+               maxlength="100"
+               required />
+
+        <button type="submit">Buscar</button>
+    </form>
+
+    @if (Model != null)
+    {
+        <div class="results-layout">
+
+            <aside class="country-panel">
+                <div class="country-info">
+
+                    <img src="@Model.Country.Flag"
+                         alt="Bandera de @Model.Country.Name" />
+
+                    <h2>@Model.Country.Name</h2>
+
+                    <div class="country-detail">
+                        <span>CAPITAL</span>
+                        <p>@Model.Country.Capital</p>
+                    </div>
+
+                    <div class="country-detail">
+                        <span>REGIÓN</span>
+                        <p>@Model.Country.Region</p>
+                    </div>
+
+                    <div class="country-detail">
+                        <span>POBLACIÓN</span>
+                        <p>@Model.Country.Population.ToString("N0")</p>
+                    </div>
+
+                </div>
+            </aside>
+
+            <section class="earthquake-results">
+
+                <div class="results-heading">
+                    <h3>Terremotos encontrados: @Model.TotalEarthquakes</h3>
+                    <p>Más recientes primero</p>
+                </div>
+
+                @if (Model.Earthquakes.Count > 0)
+                {
+                    @foreach (var earthquake in Model.Earthquakes)
+                    {
+                        <div class="earthquake-card">
+
+                            <div class="earthquake-top">
+                                <h4>Magnitud @earthquake.Magnitude</h4>
+                                <span>
+                                    @earthquake.Time.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                            </div>
+
+                            <p><strong>Lugar:</strong> @earthquake.Place</p>
+
+                            <p>
+                                <strong>Profundidad:</strong>
+                                @earthquake.Depth km
+                            </p>
+
+                            <a href="@earthquake.Url"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                Más información
+                            </a>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        No se encontraron terremotos para este país.
+                    </div>
+                }
+
+            </section>
+
+        </div>
+    }
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (TempData["Error"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Ups!',
+            text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"]?.ToString())),
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#1769aa'
+        });
+    </script>
+}
